@@ -1,0 +1,13 @@
+We send:
+{
+    "name": "My bowling game"
+}
+
+
+Return this: Game object
+{
+    "name": "My bowling game",
+    "gameID": 126364,
+    "isComplete": false,
+    "players": []
+}

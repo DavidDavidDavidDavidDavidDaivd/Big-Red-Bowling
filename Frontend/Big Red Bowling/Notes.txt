@@ -1,0 +1,131 @@
+GameFolder class: 
+	gameID: String
+	isComplete: Bool
+	players: [Player]
+
+Player struct:
+	name: String
+	frame1: Frame
+	frame2: Frame
+	frame3: Frame
+	frame4: Frame
+	frame5: Frame
+	frame6: Frame
+	frame7: Frame
+	frame8: Frame
+	frame9: Frame
+	frame10: Frame
+	score: Int (default 0)
+
+Frame struct:
+	firstRoll: [Int]
+	secondRoll: [Int]
+	thirdRoll: [Int]
+	score: Int
+	mutable: Bool
+
+Make roll immutable when the next frame is started.
+If a frame is edited, all frame data is reset.
+default roll data is [-1]
+
+
+The array of integers lists the pin IDs that were knocked down in that frame. The thirdRoll is for the tenth frame only
+
+
+When a game is completed, it is stored locally on the phone
+If you rejoin a game with the same name, you will play as you did before. Joining a game with a different name will add a player to the game
+
+EXAMPLE
+Player adds a new game with ID "my game" and name "John"
+Post to backend with name and ID
+
+~In backend~
+if the game ID does not exist:
+	create game "my game"
+	create player "John"
+	respond with game
+
+if the game ID does exist:
+	if the player name is not in the game:
+		add player to game
+	respond with game
+
+~on iPhone~
+push new view controller with game
+
+display tableview of each player:
+	playerList[Index.row].name (labelView)
+	playerList[Index.row].score (labelView)
+
+	(maybe display player with highest score)
+	pull down to refresh
+	
+	When a player is clicked, push a new view controller:
+		View controller contains a tableview of each frame
+		frame is only displayed if it has been completed or it is the present frame
+		
+		Selecting a frame will present a new view controller where pins can be selected.
+		After the pins are selected and confirmed, a post is made to the backend where the frame data is updated. 
+		posting new data will dismiss the presentation and update the data on screen
+
+	going back to the previous screen will also update the data of all players.
+
+When a game is completed, data can no longer be edited to the game and the data is stored locally on the phone
+isComplete = True
+
+
+Computing Score:
+the length of the list in each "roll" is the number of pins knocked down
+
+let frameList = [player.frame1, player.frame2, player.frame3, player.frame4, player.frame5, player.frame6, player.frame7, player.frame8, player.frame9, player.frame10]
+For frameIndex in range 8 {										//For first 8 frame calculations
+	var frame = frameList[frameIndex]
+	if frame.firstRoll == [-1] { 										//hasn't been rolled yet
+		frame.score = 0
+	}
+	else if frame.firstRoll.length == 10 {								//if the frame is a strike
+		if frameList[frameIndex + 1].firstRoll == [-1] {    			 	//check if next frame has started
+			frame.score = 0										//if not, score = 0 
+		}
+		else if frameList[frameIndex + 1].firstRoll.length == 10 {		//else, check if next roll is a strike
+			if frameList[frameIndex + 2].firstRoll == [-1] {				//If it was a strike, check if the roll after that has been bowled **This does not work for 9 and 10 frame
+				frame.score = 0									//If not, score = 0
+			}
+			else {												//if yes score = sum of two strikes + the next roll
+				frame.score = 20 + frameList[frameIndex + 2].firstRoll].length
+			}
+		else if frameList[frameIndex +1].secondRoll != [-1] {			//If the next roll wasn't a strike, check if two balls have been rolled in the next frame
+			frame.score = 10 + frameList[frameIndex + 1].firstRoll.length + frameList[frameIndex +1].secondRoll.length.  //add the scores of the next two rolls
+		}
+		else {
+			frame.score = 0.   									//if two balls haven't been rolled after the strike, frame score = 0
+		}
+	}
+	else if frame.firstRoll.length + frame.secondRoll.length == 10 {		//check for spare
+		if frameList[frameIndex + 1] != [-1] {							//If spare, check if next ball has been rolled
+			frame.score = 10 + frameList[frameIndex + 1].length
+		}
+		else {
+			frame.score = 0										//otherwise, score is 0
+		}
+	}
+	else {														//finally, if not strike or spare
+		if frame.secondRoll != [-1] {								//check if frame is complete
+			frame.score = frame.firstRoll.length + frame.secondRoll.length 														
+		}
+		else {													//if not complete, score is 0
+			frame.score = 0
+		}
+	}
+	
+
+	player.score += frame.score									//add frame score to total player score
+}
+
+
+Implement calculation for frames 9 and 10
+
+var frame10 = frameList[9]
+If frame10.secondRoll == [-1] {
+	frame10.score = 0
+else if frame

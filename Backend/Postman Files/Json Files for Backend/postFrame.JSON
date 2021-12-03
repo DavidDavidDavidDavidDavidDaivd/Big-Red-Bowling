@@ -1,0 +1,21 @@
+We send
+{
+    "gameID": 282837,
+    "name": "name of player",
+    "frameName": "frame2",
+    "firstRoll": [3,5,7],
+    "secondRoll": [1,8],
+    "thirdRoll": [-1],
+    "score": 6,
+    "mutable:" true
+}
+Return: Frame object
+{
+    "frame2": {
+        "firstRoll": [3,5,7],
+        "secondRoll": [1,8],
+        "thirdRoll": [-1],
+        "score": 6,
+        "mutable": true
+    }
+}
