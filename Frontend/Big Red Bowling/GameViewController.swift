@@ -127,10 +127,14 @@ class GameViewController: UIViewController {
     
     func setHighestScorer() {
         if let highestScorer = findTopScorer(game: game) {
+            var score = highestScorer.score
+            if highestScorer.frame10.score > highestScorer.score {
+                score = highestScorer.frame10.score
+            }
             if highestScorer.score != -1 {
-                highestScoreLabel.text = "Highest Score: \(highestScorer.score), \(highestScorer.name)"
+                highestScoreLabel.text = "Highest Score: \(score), \(highestScorer.name)"
             } else {
-                highestScoreLabel.text = "Highest Score: 0, \(highestScorer.name)"
+                highestScoreLabel.text = "Highest Score: 0, \(score)"
             }
         } else {
             highestScoreLabel.text = "Highest Score: None"}
