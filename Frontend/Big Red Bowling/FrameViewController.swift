@@ -412,7 +412,7 @@ class FrameViewController: UIViewController {
                 pinSum += 1
             }
         }
-        if rollSum == 10 {
+        if rollSum == 10 && specialButton.currentTitle == "Strike"{
             counterLabel.text = "Strike"
         }
         else if rollSum + pinSum == 10 {
