@@ -43,6 +43,9 @@ func findTopScorer(game: Game) -> Player? {
             if player.score > highestScorer.score{
                 highestScorer = player
             }
+            if player.frame10.score > highestScorer.score {
+                highestScorer = player
+            }
         }
         return highestScorer
     } else {
