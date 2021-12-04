@@ -9,8 +9,9 @@ import Foundation
 import Alamofire
 class NetworkManager {
     
-    static let endpoint = "https://davidbertuch.pythonanywhere.com/api"
+//    static let endpoint = "https://davidbertuch.pythonanywhere.com/api"
 //    static let endpoint = "http://127.0.0.1:5000/api"
+    static let endpoint = "https://bigredbowling.herokuapp.com/api"
     
     static func createGame(vc: UIViewController, Gamename: String, completion: @escaping (Game) -> Void){
         //POST Method
